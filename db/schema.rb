@@ -10,11 +10,32 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_07_25_071454) do
-  create_table "users", charset: "utf8", force: :cascade do |t|
-    t.string "name"
+ActiveRecord::Schema[7.0].define(version: 2023_07_25_084527) do
+  create_table "periods", charset: "utf8", force: :cascade do |t|
+    t.string "room", null: false
+    t.string "play_day", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
+  create_table "results", charset: "utf8", force: :cascade do |t|
+    t.string "score", null: false
+    t.string "rule", null: false
+    t.integer "rank", null: false
+    t.bigint "user_id", null: false
+    t.bigint "period_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["period_id"], name: "index_results_on_period_id"
+    t.index ["user_id"], name: "index_results_on_user_id"
+  end
+
+  create_table "users", charset: "utf8", force: :cascade do |t|
+    t.string "name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_foreign_key "results", "periods"
+  add_foreign_key "results", "users"
 end
