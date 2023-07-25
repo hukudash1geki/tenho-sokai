@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>TenhoSokai</title>
+    <title>天鳳総会</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
@@ -11,6 +11,16 @@
   </head>
 
   <body>
+    <header class="header">
+      <div class="header__bar row">
+        <h1 class="grid-6"><a href="/">天鳳総会</a></h1>
+      </div>
+    </header>
     <%= yield %>
+    <footer>
+      <p>
+        天鳳総会
+      </p>
+    </footer>
   </body>
 </html>
