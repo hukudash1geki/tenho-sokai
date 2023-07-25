@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  resources :tenho_sokais, only: [:index, :show] do
+  resources :tenho_sokais, only: [:index, :create, :show] do
     collection do
       get 'search'
     end
