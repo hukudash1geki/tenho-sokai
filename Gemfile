@@ -72,3 +72,7 @@ group :test do
 end
 
 gem 'pry-rails'
+
+gem 'nokogiri'
+gem 'httparty'
+gem 'mechanize'

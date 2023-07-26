@@ -1,6 +1,8 @@
 class TenhoSokaisController < ApplicationController
+
   def index
-    @users = User.all
+    scraper = TenhouScraper.new
+    scraper.download_log
   end
 
   def create
