@@ -1,1 +1,9 @@
-<%= @log_data %>
+<!-- app/views/tenho_sokais/index.html.erb -->
+
+<h1>ログファイルのダウンロードリンク一覧</h1>
+
+<ul>
+  <% @log_urls.each do |url| %>
+    <li><%= link_to url, url %></li>
+  <% end %>
+</ul>
