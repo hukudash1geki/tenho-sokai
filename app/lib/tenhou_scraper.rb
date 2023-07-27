@@ -1,32 +1,37 @@
-
-require 'net/http'
-require 'nokogiri'
+require 'selenium-webdriver'
 
 class TenhouScraper
   def self.get_links_with_dat_sca(url)
-    game_logs = []
+    log_urls = []
+
+    options = Selenium::WebDriver::Chrome::Options.new
+    options.add_argument('--headless')
+    driver = Selenium::WebDriver.for :chrome, options: options
 
     begin
-      # HTTPリクエストを送信してウェブページの内容を取得
-      uri = URI(url)
-      response = Net::HTTP.get(uri)
+      driver.get(url)
+      wait = Selenium::WebDriver::Wait.new(timeout: 30)
+      wait.until { driver.execute_script('return document.readyState') == 'complete' }
 
-      # Nokogiriを使ってHTMLを解析
-      doc = Nokogiri::HTML(response)
+      page_source = driver.page_source
+      doc = Nokogiri::HTML(page_source)
 
-      # 対戦ログを抽出
-      logs = doc.css("table.s tr")
-      logs.each do |log|
-        game_logs << log.text
+      doc.css("a").each do |link|
+        href = link['href']
+        if href && href.start_with?("dat/")
+          absolute_url = URI.join(url, href)
+          log_urls << absolute_url.to_s
+          sleep 1
+        end
       end
-
     rescue StandardError => e
       puts "Error occurred while scraping: #{e.message}"
+    ensure
+      driver.quit
     end
-     # デバッグ情報をターミナルに出力
-     puts "game_logs: #{game_logs.inspect}"
 
-    game_logs
+    puts "log_urls: #{log_urls.inspect}"
+    log_urls
   end
 end
 
