@@ -3,12 +3,12 @@ require 'open-uri'
 require 'zlib'
 
 class TenhouScraper
-  def self.get_links_with_dat_sca
-    url = URI.parse("https://tenhou.net/sc/raw/dat/scb2023072100.log.gz")
+  def self.download_log(log_letter)
+    url = URI.parse("https://tenhou.net/sc/raw/dat/#{log_letter}.log.gz")
     local_filename = File.basename(url.path)
     current_directory = File.dirname(__FILE__)
     save_path = File.join(current_directory, local_filename)
-    extracted_filename = local_filename.gsub('.gz', '')
+    extracted_filename = local_filename.gsub('.gz', '') # 追加
 
     begin
       URI.open(url) do |remote_file|
@@ -29,8 +29,40 @@ class TenhouScraper
       puts "ダウンロード中にエラーが発生しました: #{e.message}"
     end
   end
-end
 
+  current_time = Time.now
+  start_time = current_time - 20 * 60 # 現在の時刻から20分前の時刻を計算（1分は 60 秒）
+  end_time = Time.new(current_time.year, current_time.month, current_time.day, 0, 0, 0) - 7 * 24 * 60 * 60 # 7日前の0時の時刻を設定（1日は 24 * 60 * 60 秒）
+  current_time = start_time.to_i - start_time.to_i % 3600 # 1時間区切りに調整
+
+  while current_time >= end_time.to_i
+    TenhouScraper.download_log("scb#{Time.at(current_time).strftime('%Y%m%d%H')}")
+    current_time -= 3600  
+  end
+
+  current_time = Time.now
+  start_time = current_time - 20 * 60 # 現在の時刻から20分前の時刻を計算（1分は 60 秒）
+  end_time = Time.new(current_time.year, current_time.month, current_time.day, 0, 0, 0) - 7 * 24 * 60 * 60 # 7日前の0時の時刻を設定（1日は 24 * 60 * 60 秒）
+  current_time = start_time.to_i - start_time.to_i % 3600 # 1時間区切りに調整
+
+  while current_time >= end_time.to_i
+    TenhouScraper.download_log("sca#{Time.at(current_time).strftime('%Y%m%d')}")
+    current_time -= 24 * 60 * 60 # 1日進める
+  end
+
+
+  # 7日から今年の01月01日までのscaとscb
+  current_time = Time.now
+  start_time = current_time - 7 * 24 * 60 * 60 # 8日前の時刻を計算（1日は 24 * 60 * 60 秒）
+  end_time = Time.new(current_time.year, 1, 1, 0, 0, 0) # その年の1月1日0時の時刻を設定
+  current_time = start_time.to_i - start_time.to_i % (24 * 60 * 60) # 1日区切りに調整
+
+  while current_time >= end_time.to_i
+    TenhouScraper.download_log("2023/sca#{Time.at(current_time).strftime('%Y%m%d')}")
+    TenhouScraper.download_log("2023/scb#{Time.at(current_time).strftime('%Y%m%d')}")
+    current_time -= 24 * 60 * 60 # 1日進める
+  end
+end
 
 
 

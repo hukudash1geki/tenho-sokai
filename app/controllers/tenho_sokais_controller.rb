@@ -1,6 +1,6 @@
 class TenhoSokaisController < ApplicationController
   def index
-    log_urls = TenhouScraper.get_links_with_dat_sca
+    log_urls = TenhouScraper.download_log(log_letter)
   end
 
   def create
