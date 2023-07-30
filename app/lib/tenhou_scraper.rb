@@ -1,30 +1,37 @@
 require 'uri'
 require 'open-uri'
 require 'zlib'
+require 'fileutils'
 
 class TenhouScraper
   def self.download_log(log_letter)
     url = URI.parse("https://tenhou.net/sc/raw/dat/#{log_letter}.log.gz")
     local_filename = File.basename(url.path)
-    current_directory = File.dirname(__FILE__)
-    save_path = File.join(current_directory, local_filename)
+    tmp_directory = Rails.root.join('tmp')
+    save_path = File.join(tmp_directory, local_filename)
     extracted_filename = local_filename.gsub('.gz', '') # 追加
-
+  
     begin
       URI.open(url) do |remote_file|
         File.open(save_path, 'wb') do |local_file|
           local_file.write(remote_file.read)
         end
       end
-
+  
       Zlib::GzipReader.open(save_path) do |gz|
-        File.open(File.join(current_directory, extracted_filename), 'wb') do |unzipped_file|
+        File.open(File.join(tmp_directory, extracted_filename), 'wb') do |unzipped_file|
           unzipped_file.write(gz.read)
         end
       end
-
+  
       puts "ファイルをダウンロードしました: #{local_filename}"
       puts "ファイルを展開しました: #{extracted_filename}"
+      
+      # ファイルをtmpディレクトリからstorageディレクトリに移動させる
+      storage_directory = Rails.root.join('storage')
+      FileUtils.move(File.join(tmp_directory, extracted_filename), storage_directory)
+  
+      puts "ファイルを移動しました: #{File.join(storage_directory, extracted_filename)}"
     rescue => e
       puts "ダウンロード中にエラーが発生しました: #{e.message}"
     end
