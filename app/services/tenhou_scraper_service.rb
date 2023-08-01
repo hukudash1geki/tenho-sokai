@@ -3,7 +3,7 @@ require 'open-uri'
 require 'zlib'
 require 'fileutils'
 
-class TenhouScraper
+class TenhouScraperService
   def self.download_log(log_letter)
     url = URI.parse("https://tenhou.net/sc/raw/dat/#{log_letter}.log.gz")
     local_filename = File.basename(url.path)
@@ -35,6 +35,8 @@ class TenhouScraper
     rescue => e
       puts "ダウンロード中にエラーが発生しました: #{e.message}"
     end
+
+    
   end
 
   current_time = Time.now
