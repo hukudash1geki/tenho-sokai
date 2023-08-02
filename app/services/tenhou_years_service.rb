@@ -41,13 +41,20 @@ class TenhouYearsService
           end
         end
       end
+    
+      Dir.glob(File.join(tenho_directory, '*.log')).each do |log_path|
+        storage_directory = Rails.root.join('storage')
+        FileUtils.mkdir_p(storage_directory)
+        FileUtils.mv(log_path, storage_directory) if File.exist?(log_path)
+        puts "ファイルを移動しました: #{File.basename(log_path)}"
+      end
 
     rescue => e
       puts "ダウンロード中にエラーが発生しました: #{e.message}"
     end
   end
 
-  # 去年から2006年までのデータをダウンロードしてログを展開し、条件を満たすファイルを保存
+  # 去年から2006年までのデータをダウンロードしてログを展開し、条件を満たすファイルを保存して移動
   (Time.now.year - 1).downto(2006) do |year|
     TenhouYearsService.download_and_extract_logs(year)
   end
