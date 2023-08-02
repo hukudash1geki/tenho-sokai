@@ -2,13 +2,15 @@ require 'uri'
 require 'open-uri'
 require 'zip'
 require 'fileutils'
+require 'zlib'
 
 class TenhouYearsService
-  def self.download_and_extract(year)
+  def self.download_and_extract_logs(year)
     url = URI.parse("https://tenhou.net/sc/raw/scraw#{year}.zip")
     local_filename = File.basename(url.path)
-    tmp_directory = Rails.root.join('tmp')
-    save_path = File.join(tmp_directory, local_filename)
+    tenho_directory = Rails.root.join('tenho')
+    FileUtils.mkdir_p(tenho_directory)
+    save_path = File.join(tenho_directory, local_filename)
 
     begin
       # ファイルをダウンロード
@@ -18,27 +20,35 @@ class TenhouYearsService
         end
       end
 
-      storage_directory = Rails.root.join('storage', year.to_s)
-      FileUtils.mkdir_p(storage_directory)
-
       Zip::File.open(save_path) do |zip_file|
         zip_file.each do |entry|
-          extracted_file_path = File.join(tmp_directory, entry.name)
-          storage_file_path = File.join(storage_directory, File.basename(entry.name))
-          FileUtils.copy(extracted_file_path, storage_file_path)
-          puts "ファイルを移動しました: #{entry.name}"
+          if entry.name.end_with?('.log', '.log.gz') && (entry.name.include?('sca') || entry.name.include?('scb'))
+            extracted_file_path = File.join(tenho_directory, File.basename(entry.name))
+            zip_file.extract(entry, extracted_file_path) { true }
+
+            puts "ログファイルを展開しました: #{entry.name}"
+
+            if entry.name.end_with?('.log.gz')
+              # .log.gz ファイルを展開して保存
+              log_file_path = File.join(tenho_directory, File.basename(entry.name, '.gz'))
+              Zlib::GzipReader.open(extracted_file_path) do |gzip|
+                File.open(log_file_path, 'wb') do |log_file|
+                  log_file.write(gzip.read)
+                end
+              end
+              puts "ログファイルを展開して保存しました: #{log_file_path}"
+            end
+          end
         end
       end
 
     rescue => e
       puts "ダウンロード中にエラーが発生しました: #{e.message}"
-    ensure
-      FileUtils.rm_rf(tmp_directory)
     end
   end
 
-  # 去年から2006年までのデータをダウンロードして移動する
+  # 去年から2006年までのデータをダウンロードしてログを展開し、条件を満たすファイルを保存
   (Time.now.year - 1).downto(2006) do |year|
-    TenhouYearsService.download_and_extract(year)
+    TenhouYearsService.download_and_extract_logs(year)
   end
 end

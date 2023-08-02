@@ -9,6 +9,8 @@ class TenhoSokaisController < ApplicationController
   end
 
   def log_caram
-    @log_caram = LogSplitService.log_caram
+    @download_and_extract_logs = TenhouYearsService.download_and_extract_logs
   end
+
+
 end
