@@ -19,5 +19,9 @@ module TenhoSokai
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+    config.after_initialize do
+      # ここで非同期ジョブを作成し、ジョブキューに追加する
+      TenhoJob.perform_later
+    end
   end
 end

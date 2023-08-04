@@ -12,6 +12,11 @@ class TenhouYearsService
     FileUtils.mkdir_p(tenho_directory)
     save_path = File.join(tenho_directory, local_filename)
 
+    if File.exist?(save_path)
+      puts "ファイルは既に存在します: #{local_filename}"
+      return
+    end
+
     begin
       # ファイルをダウンロード
       File.open(save_path, 'wb') do |local_file|

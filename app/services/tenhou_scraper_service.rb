@@ -7,8 +7,9 @@ class TenhouScraperService
   def self.download_log(log_letter)
     url = URI.parse("https://tenhou.net/sc/raw/dat/#{log_letter}.log.gz")
     local_filename = File.basename(url.path)
-    tmp_directory = Rails.root.join('tmp')
-    save_path = File.join(tmp_directory, local_filename)
+    tenho_directory = Rails.root.join('tenho')
+    FileUtils.mkdir_p(tenho_directory)
+    save_path = File.join(tenho_directory, local_filename)
     extracted_filename = local_filename.gsub('.gz', '') # 追加
   
     begin
@@ -19,7 +20,7 @@ class TenhouScraperService
       end
   
       Zlib::GzipReader.open(save_path) do |gz|
-        File.open(File.join(tmp_directory, extracted_filename), 'wb') do |unzipped_file|
+        File.open(File.join(tenho_directory, extracted_filename), 'wb') do |unzipped_file|
           unzipped_file.write(gz.read)
         end
       end
@@ -29,9 +30,10 @@ class TenhouScraperService
       
       # ファイルをtmpディレクトリからstorageディレクトリに移動させる
       storage_directory = Rails.root.join('storage')
-      FileUtils.move(File.join(tmp_directory, extracted_filename), storage_directory)
+      FileUtils.move(File.join(tenho_directory, extracted_filename), storage_directory)
   
       puts "ファイルを移動しました: #{File.join(storage_directory, extracted_filename)}"
+
     rescue => e
       puts "ダウンロード中にエラーが発生しました: #{e.message}"
     end
@@ -45,7 +47,7 @@ class TenhouScraperService
   current_time = start_time.to_i - start_time.to_i % 3600 # 1時間区切りに調整
 
   while current_time >= end_time.to_i
-    TenhouScraper.download_log("scb#{Time.at(current_time).strftime('%Y%m%d%H')}")
+    TenhouScraperService.download_log("scb#{Time.at(current_time).strftime('%Y%m%d%H')}")
     current_time -= 3600  
   end
 
@@ -55,7 +57,7 @@ class TenhouScraperService
   current_time = start_time.to_i - start_time.to_i % 3600 # 1時間区切りに調整
 
   while current_time >= end_time.to_i
-    TenhouScraper.download_log("sca#{Time.at(current_time).strftime('%Y%m%d')}")
+    TenhouScraperService.download_log("sca#{Time.at(current_time).strftime('%Y%m%d')}")
     current_time -= 24 * 60 * 60 # 1日進める
   end
 
@@ -67,10 +69,11 @@ class TenhouScraperService
   current_time = start_time.to_i - start_time.to_i % (24 * 60 * 60) # 1日区切りに調整
 
   while current_time >= end_time.to_i
-    TenhouScraper.download_log("2023/sca#{Time.at(current_time).strftime('%Y%m%d')}")
-    TenhouScraper.download_log("2023/scb#{Time.at(current_time).strftime('%Y%m%d')}")
+    TenhouScraperService.download_log("2023/sca#{Time.at(current_time).strftime('%Y%m%d')}")
+    TenhouScraperService.download_log("2023/scb#{Time.at(current_time).strftime('%Y%m%d')}")
     current_time -= 24 * 60 * 60 # 1日進める
   end
+
 end
 
 
