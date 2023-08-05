@@ -16,7 +16,7 @@ class TenhoJob < ApplicationJob
     else
       Rails.logger.info 'データが既に保存されています'
       
-      @find_matching_line = LogSearchService.find_matching 
+      @split_and_save_new_logs = LogSearchService.split_and_save_new_logs
     end
   end
 end

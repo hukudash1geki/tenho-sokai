@@ -22,32 +22,33 @@ class NewLogService
     next if file_updated_time <= storage_directory_time
 
     lines_to_save = []
-capturing = false
+    capturing = false
 
-File.open(data_file_path, 'r:UTF-8') do |file|
-  file.each_line do |log_line|
-    if capturing
-      lines_to_save << log_line
+    File.open(data_file_path, 'r:UTF-8') do |file|
+      file.each_line do |log_line|
+        if capturing
+          lines_to_save << log_line
+        end
+
+        if log_line.include?(last_period.room) &&
+          log_line.include?(last_period.play_day) &&
+          log_line.include?(last_result.rule) &&
+          log_line.include?(last_result.score)
+          capturing = true
+          lines_to_save << log_line  # マッチした行を保存
+          puts "Matching line found: #{log_line}"  # マッチした行を表示
+        else
+          puts "Not matching line: #{log_line}"  # マッチしなかった行を表示
+        end
+      end
     end
-
-    if log_line.include?("last_period.room") &&
-       log_line.include?("last_period.play_day") 
-
-      capturing = true
-      lines_to_save << log_line  # マッチした行を保存
-      puts "Matching line found: #{log_line}"  # マッチした行を表示
-    else
-      puts "Not matching line: #{log_line}"  # マッチしなかった行を表示
-    end
-  end
-end
 
 # 保存する行が存在するか判定して保存
 if lines_to_save.any?
   split_and_save_new_data(data_file_path, storage_directory, file_name, lines_to_save)
   puts "最後に保存された行を含む行を取得しました。"
 else
-  split_and_save_all_data(data_file_path, storage_directory, file_name)
+  split_and_save_all_data(data_file_path)
   puts "一致する行が見つからなかったため、ファイル全体を保存します。"
 end
 
@@ -57,10 +58,9 @@ File.write(Rails.root.join('last_processed_time.txt'), Time.now.to_i.to_s)
     end
   end
 
-  def self.split_and_save_new_data(data_file_path, storage_directory, file_name, lines_to_save)
-    storage_file_path = File.join(storage_directory, "#{file_name}.log")
+  def self.split_and_save_new_data(data_file_path, lines_to_save)
   
-    File.open(storage_file_path, 'a:UTF-8') do |file|
+    File.open(data_file_path, 'a:UTF-8') do |file|
       lines_to_save.each { |line| file.puts(line) }
     end
   
@@ -108,7 +108,7 @@ File.write(Rails.root.join('last_processed_time.txt'), Time.now.to_i.to_s)
     end
   end
 
-  def self.split_and_save_all_data(data_file_path, storage_directory, file_name)
+  def self.split_and_save_all_data(data_file_path)
     File.open(data_file_path, 'r:UTF-8') do |file|
       puts "ファイル: #{File.basename(data_file_path)}"
       file.each_line.with_index do |log_line, line_number|
