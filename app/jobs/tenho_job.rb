@@ -15,7 +15,8 @@ class TenhoJob < ApplicationJob
       @log_caram = LogSplitService.log_caram
     else
       Rails.logger.info 'データが既に保存されています'
-      @run_one_time = RunOneTimeService.run_one_time
+      
+      @find_matching_line = LogSearchService.find_matching 
     end
   end
 end

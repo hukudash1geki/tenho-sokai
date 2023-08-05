@@ -61,42 +61,4 @@ class LogSplitService
     string.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '').valid_encoding?
   end
 
-  def self.split_and_save_new_logs
-    storage_directory = Rails.root.join('storage')
-    processed_logs_directory = Rails.root.join('processed_logs')
-    FileUtils.mkdir_p(processed_logs_directory)
-
-    # 前回処理した時刻を読み込む（ファイルが存在しない場合は 0 とする）
-    last_processed_time = File.exist?('last_processed_time.txt') ? File.read('last_processed_time.txt').to_i : 0
-
-    data_files = Dir.glob(File.join(storage_directory, '*.log'))
-
-    data_files.each do |data_file_path|
-      file_name = File.basename(data_file_path)
-      next if file_name.include?('invalid_pattern')
-
-      # ファイルの更新時刻を取得
-      file_updated_time = File.mtime(data_file_path).to_i
-
-      # 前回処理した時刻以降に更新されたファイルのみ処理する
-      next if file_updated_time <= last_processed_time
-
-      File.open(data_file_path, 'r:UTF-8') do |file|
-        # ...（既存のコードをそのまま保持）...
-
-        # データをファイルに保存
-        save_path = File.join(processed_logs_directory, "#{file_name}_processed.txt")
-        File.open(save_path, 'a:UTF-8') do |output_file|
-          output_file.puts("ファイル: #{File.basename(data_file_path)}")
-          output_file.puts("-" * 30)
-          # ...（データの保存処理を行う部分）...
-          output_file.puts("-" * 30)
-        end
-      end
-    end
-
-    # 処理済み時刻を更新して保存
-    File.write('last_processed_time.txt', Time.now.to_i.to_s)
-  end
-
 end
