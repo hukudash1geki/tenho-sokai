@@ -10,19 +10,13 @@ class ScbSearchService
 
     data_files = Dir.glob(File.join(storage_directory, '*scb*.log'))
 
-    data_files.each do |data_file_path|
-      file_name = File.basename(data_file_path)
-      
-      next if file_name.include?('invalid_pattern')
+    # ファイルの更新時刻を取得して、最新のファイルを抽出
+    newest_file = data_files.max_by { |data_file_path| File.mtime(data_file_path) }
 
-      # ファイルの更新時刻を取得
-      file_updated_time = File.mtime(data_file_path).to_i
-      # 前回処理した時刻以降に更新されたファイルのみ処理する
-      next if file_updated_time <= storage_directory_time
-      lines_to_save = []
-      capturing = false
+    lines_to_save = []
+    capturing = false
       
-      File.open(data_file_path, 'r:UTF-8') do |file|
+      File.open(newest_file, 'r:UTF-8') do |file|
         file.each_line do |log_line|
           if capturing
             lines_to_save << log_line
@@ -47,6 +41,13 @@ class ScbSearchService
       
       if lines_to_save.any?
         puts "最後に保存された行を含む行を取得しました。"
+        puts last_scbLog .scb_rule
+            puts last_scbLog .scb_name1
+            puts last_scbLog .scb_name2
+            puts last_scbLog .scb_name3
+            puts last_scbLog .scb_score1
+            puts last_scbLog .scb_score2
+            puts last_scbLog .scb_score3
       else
         puts "一致する行が見つからなかったため、ファイル全体を保存します。"
         puts last_scbLog .scb_rule
@@ -60,6 +61,5 @@ class ScbSearchService
 
       # 処理済み時刻を更新して保存
       File.write(Rails.root.join('last_processed_time.txt'), Time.now.to_i.to_s)
-    end
   end
 end
