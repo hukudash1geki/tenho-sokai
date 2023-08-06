@@ -39,10 +39,17 @@ class RunOneTimeService
     end
   end
 
-  def self.run_one_time
+  def self.run_one_time_scb
     current_time = Time.now
     start_time = current_time - 20 * 60 
     log_letter = "scb#{Time.at(start_time).strftime('%Y%m%d%H')}"
+    @download_log = RunOneTimeService.download_log(log_letter)
+  end
+
+  def self.run_one_time_sca
+    current_time = Time.now
+    start_time = current_time - 20 * 60 # 現在の時刻から20分前の時刻を計算（1分は 60 秒）
+    log_letter = "sca#{Time.at(start_time).strftime('%Y%m%d')}"
     @download_log = RunOneTimeService.download_log(log_letter)
   end
 end

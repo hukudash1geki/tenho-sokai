@@ -53,7 +53,7 @@ class TenhouScraperService
 
   current_time = Time.now
   start_time = current_time - 20 * 60 # 現在の時刻から20分前の時刻を計算（1分は 60 秒）
-  end_time = Time.new(current_time.year, current_time.month, current_time.day, 0, 0, 0) - 7 * 24 * 60 * 60 # 7日前の0時の時刻を設定（1日は 24 * 60 * 60 秒）
+  end_time = Time.new(current_time.year, current_time.month, current_time.day, 0, 0, 0) - 11 * 24 * 60 * 60 # 7日前の0時の時刻を設定（1日は 24 * 60 * 60 秒）
   current_time = start_time.to_i - start_time.to_i % 3600 # 1時間区切りに調整
 
   while current_time >= end_time.to_i
@@ -62,17 +62,7 @@ class TenhouScraperService
   end
 
 
-  # 7日から今年の01月01日までのscaとscb
-  current_time = Time.now
-  start_time = current_time - 7 * 24 * 60 * 60 # 8日前の時刻を計算（1日は 24 * 60 * 60 秒）
-  end_time = Time.new(current_time.year, 1, 1, 0, 0, 0) # その年の1月1日0時の時刻を設定
-  current_time = start_time.to_i - start_time.to_i % (24 * 60 * 60) # 1日区切りに調整
-
-  while current_time >= end_time.to_i
-    TenhouScraperService.download_log("2023/sca#{Time.at(current_time).strftime('%Y%m%d')}")
-    TenhouScraperService.download_log("2023/scb#{Time.at(current_time).strftime('%Y%m%d')}")
-    current_time -= 24 * 60 * 60 # 1日進める
-  end
+  
 
 end
 

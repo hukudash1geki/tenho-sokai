@@ -10,32 +10,36 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_07_25_084527) do
-  create_table "periods", charset: "utf8", force: :cascade do |t|
+ActiveRecord::Schema[7.0].define(version: 2023_08_06_102022) do
+  create_table "sca_logs", charset: "utf8", force: :cascade do |t|
     t.string "room", null: false
-    t.string "play_day", null: false
+    t.datetime "sca_daytime", null: false
+    t.string "sca_rule", null: false
+    t.string "sca_name1", null: false
+    t.string "sca_name2", null: false
+    t.string "sca_name3", null: false
+    t.string "sca_name4"
+    t.string "sca_score1", null: false
+    t.string "sca_score2", null: false
+    t.string "sca_score3", null: false
+    t.string "sca_score4"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "results", charset: "utf8", force: :cascade do |t|
-    t.string "score", null: false
-    t.string "rule", null: false
-    t.integer "rank", null: false
-    t.bigint "user_id", null: false
-    t.bigint "period_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["period_id"], name: "index_results_on_period_id"
-    t.index ["user_id"], name: "index_results_on_user_id"
-  end
-
-  create_table "users", charset: "utf8", force: :cascade do |t|
-    t.string "name", null: false
+  create_table "scb_logs", charset: "utf8", force: :cascade do |t|
+    t.datetime "scb_daytime", null: false
+    t.string "scb_rule", null: false
+    t.string "scb_name1", null: false
+    t.string "scb_name2", null: false
+    t.string "scb_name3", null: false
+    t.string "scb_name4"
+    t.string "scb_score1", null: false
+    t.string "scb_score2", null: false
+    t.string "scb_score3", null: false
+    t.string "scb_score4"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  add_foreign_key "results", "periods"
-  add_foreign_key "results", "users"
 end
