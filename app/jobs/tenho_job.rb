@@ -17,9 +17,9 @@ class TenhoJob < ApplicationJob
     else
       Rails.logger.info 'データが既に保存されています'
       @run_one_time_scb = RunOneTimeService.run_one_time_scb
-      @split_and_save_new_logs = ScbSearchService.split_and_save_new_scb
+      @new_save_scb = ScbNewRunService.new_save_scb
       @run_one_time_sca = RunOneTimeService.run_one_time_sca
-      @split_and_save_new_logs = ScaSearchService.split_and_save_new_sca
+      @new_save_sca = ScaNewRunService.new_save_sca
     end
   end
 end

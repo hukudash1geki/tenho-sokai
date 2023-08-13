@@ -40,9 +40,10 @@ class RunOneTimeService
 
           puts "combined_content を保存しました: #{combined_content_path}"
         end
-        new_target_path = File.join(tenho_directory, target_file)
-        Zlib::GzipWriter.open(new_target_path) do |gz|
-          gz.write(new_content)
+        URI.open(url) do |remote_file|
+          File.open(save_path, 'wb') do |local_file|
+            local_file.write(remote_file.read)
+          end
         end
       else
         puts "ファイルが見つかりませんでした"
