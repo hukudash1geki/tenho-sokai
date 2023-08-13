@@ -34,7 +34,7 @@ class ScaSearchService
             lines_to_save << log_line  # マッチした行を保存
             puts "Matching line found: #{log_line}"  # マッチした行を表示
           else
-            puts "Not matching line: #{log_line}"  # マッチしなかった行を表示
+            # puts "Not matching line: #{log_line}"  # マッチしなかった行を表示
           end
         end
       end
