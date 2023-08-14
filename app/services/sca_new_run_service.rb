@@ -10,18 +10,34 @@ class ScaNewRunService
     data_files = Dir.glob(File.join(storage_directory, '*{sca*,diff*sca*}.log'))
 
     # ファイルの更新時刻を取得して、最新のファイルを抽出
-    newest_file = data_files.max_by { |data_file_path| File.mtime(data_file_path) }
+    closest_file = nil
+    closest_date_diff = Float::INFINITY
+
+    current_date = Time.now.strftime('%Y%m%d').to_i
+
+    data_files.each do |data_file_path|
+      file_name = File.basename(data_file_path)
+      file_date = file_name[/\d+/].to_i
+      date_diff = (current_date - file_date).abs
+    
+      if date_diff < closest_date_diff
+        closest_date_diff = date_diff
+        closest_file = data_file_path
+      elsif date_diff == closest_date_diff && file_name.include?('diff')
+        closest_file = data_file_path
+      end
+    end
 
     lines_to_save = []
     capturing = false
-      
-      file_name = File.basename(newest_file)
-      play_day = file_name[/\d+/]
 
-      File.open(newest_file, 'r:UTF-8') do |file|
-      puts "ファイル: #{File.basename(newest_file)}"
+    file_name = File.basename(closest_file)
+    play_day = file_name[/\d+/]
+
+    File.open(closest_file, 'r:UTF-8') do |file|
+      puts "ファイル: #{File.basename(closest_file)}"
       file.each_line.with_index do |log_line, line_number|
-        newest_file_path = newest_file  # 行数も取得
+        closest_file_path = closest_file  # 行数も取得
           # エンコードが有効な場合のみ処理を行う
           next unless valid_encoding?(log_line)
       

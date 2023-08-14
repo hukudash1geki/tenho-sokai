@@ -1,5 +1,0 @@
-tenho_job:
-  cron: "*/20 * * * *"
-  class: "TimeJob"
-  queue: default
-  description: "Run TimeJob every 20 minutes"
