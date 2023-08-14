@@ -27,24 +27,30 @@ class RunOneTimeService
         # 古いファイルを展開
         Zlib::GzipReader.open(File.join(tenho_directory, target_file)) do |old_gz|
           old_content = old_gz.read
-          # 重複部分を取り除いて新しいファイルを作成
-          combined_content = new_content.gsub(old_content, '')
-          # 古いファイルの拡張子を .log に変更して新しいファイル名を作成
-          combined_filename = "diff_" + File.basename(target_file, '.log.gz') + '.log'
-          combined_content_path = File.join(storage_directory, combined_filename)
+          # 各ファイルを行ごとに配列に変換
+          old_lines = old_content.lines
+          new_lines = new_content.lines
+           # 重複している行を削除
+           combined_lines = new_lines.reject { |line| old_lines.include?(line) }
 
-          # combined_content を保存
-          File.open(combined_content_path, 'wb') do |combined_file|
-            combined_file.write(combined_content)
+           # 古いファイルの拡張子を .log に変更して新しいファイル名を作成
+           combined_filename = "diff_" + File.basename(target_file, '.log.gz') + '.log'
+           combined_content_path = File.join(storage_directory, combined_filename)
+
+           # combined_lines を保存
+           File.open(combined_content_path, 'w:UTF-8') do |combined_file|
+             combined_file.write(combined_lines.join)
+           end
+
+          URI.open(url) do |remote_file|
+            File.open(save_path, 'wb') do |local_file|
+              local_file.write(remote_file.read)
+            end
           end
 
           puts "combined_content を保存しました: #{combined_content_path}"
         end
-        URI.open(url) do |remote_file|
-          File.open(save_path, 'wb') do |local_file|
-            local_file.write(remote_file.read)
-          end
-        end
+        
       else
         puts "ファイルが見つかりませんでした"
         URI.open(url) do |remote_file|

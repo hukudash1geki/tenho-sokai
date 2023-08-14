@@ -10,8 +10,8 @@ class TenhoJob < ApplicationJob
       start_time = current_time - 20 * 60 
       log_letter = "scb#{Time.at(start_time).strftime('%Y%m%d%H')}"
       @download_log = TenhouScraperService.download_log(log_letter)
-      # year = Time.now.year - 1
-      # @download_and_extract_logs = TenhouYearsService.download_and_extract_logs(year)
+      year = Time.now.year - 1
+      @download_and_extract_logs = TenhouYearsService.download_and_extract_logs(year)
       @scb_caram = ScbSplitService.scb_caram
       @sca_caram = ScaSplitService.sca_caram
     else
