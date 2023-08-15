@@ -79,5 +79,4 @@ gem 'mechanize'
 gem 'open-uri'
 gem 'rubyzip'
 gem 'diffy'
-gem 'whenever', require: false
-gem 'sidekiq'
+gem 'rufus-scheduler'
