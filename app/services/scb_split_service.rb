@@ -34,16 +34,13 @@ class ScbSplitService
           # `parsed_datetime` を `sca_daytime` に代入
           scb_daytime = parsed_datetime
       
-          players_data = players_data.split(" ")
           players = []
-          players_data.each do |player_data|
-            name, score = player_data.split("(")
-            score = score.chomp(")").to_f
-            players << { name: name.strip, score: score }
+          players_data.scan(/([^\(\)]+)\(([-+]?\d+)\)/) do |name, score|
+            players << { name: name.strip, score: score.to_i }
           end
       
           game_log = ScbLog.new(scb_rule: scb_rule, scb_daytime: scb_daytime)
-          players.each_with_index do |player, index|
+          players.take(4).each_with_index do |player, index|
             game_log["scb_name#{index + 1}"] = player[:name]
             game_log["scb_score#{index + 1}"] = player[:score]
           end
@@ -51,7 +48,11 @@ class ScbSplitService
           puts "ルール: #{scb_rule}"
       
           # game_logの保存処理
-          game_log.save
+          if game_log.save
+            puts "Game log saved successfully!"
+          else
+            puts "Failed to save game log: #{game_log.errors.full_messages.join(', ')}"
+          end
       
           players.each_with_index do |player, index|
             puts "名前: #{player[:name]}, 得点: #{player[:score]}, 順位: #{index + 1}"
