@@ -59,8 +59,10 @@ class TenhouYearsService
     end
   end
 
-  # 去年から2006年までのデータをダウンロードしてログを展開し、条件を満たすファイルを保存して移動
-  (Time.now.year - 1).downto(2006) do |year|
-    TenhouYearsService.download_and_extract_logs(year)
+  def self.year_service
+    # 去年から2006年までのデータをダウンロードしてログを展開し、条件を満たすファイルを保存して移動
+    (Time.now.year - 1).downto(2006) do |year|
+      TenhouYearsService.download_and_extract_logs(year)
+    end
   end
 end
