@@ -43,7 +43,7 @@ class ScaNewRunService
       
           # パイプ記号 "|" でデータを分割
           begin
-            room, time, sca_rule, players_data = log_line.split(" | ")
+            room, time, sca_rule, sca_players_data = log_line.split(" | ")
           rescue ArgumentError => e
             puts "エンコードエラーが発生したため、ファイルをスキップします（行: #{line_number + 1}）: #{e.message}"
             next  # ファイルをスキップせずに処理を続行する
@@ -61,7 +61,7 @@ class ScaNewRunService
           sca_daytime = parsed_datetime
       
           players = []
-          players_data.scan(/([^\(\)]+)\(([-+]?\d+)\)/) do |name, score|
+          sca_players_data.scan(/([^\(\)]+)\(([-+]?\d+(?:\.\d+)?)?\)/) do |name, score|
             players << { name: name.strip, score: score.to_i }
           end
       

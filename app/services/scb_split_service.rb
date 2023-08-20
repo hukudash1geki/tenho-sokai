@@ -35,7 +35,7 @@ class ScbSplitService
           scb_daytime = parsed_datetime
       
           players = []
-          players_data.scan(/([^\(\)]+)\(([-+]?\d+)\)/) do |name, score|
+          players_data.scan(/([^\(\)]+)\(([-+]?\d+(?:\.\d+)?)?\)/)  do |name, score|
             players << { name: name.strip, score: score.to_i }
           end
       

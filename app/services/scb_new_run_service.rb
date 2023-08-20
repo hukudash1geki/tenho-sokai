@@ -35,7 +35,7 @@ class ScbNewRunService
       scb_play_day = file_name[/\d+/]
       File.open(closest_file, 'r:UTF-8') do |file|
         puts "ファイル: #{File.basename(closest_file)}"
-        file.each_line.with_index do |log_line, line_number|  # 行数も取得
+        file.each_line.with_index do |log_line, line_number|# 行数も取得
           # エンコードが有効な場合のみ処理を行う
           next unless valid_encoding?(log_line)
       
@@ -59,7 +59,7 @@ class ScbNewRunService
           scb_daytime = parsed_datetime
       
           players = []
-          players_data.scan(/([^\(\)]+)\(([-+]?\d+)\)/) do |name, score|
+          players_data.scan(/([^\(\)]+)\(([-+]?\d+(?:\.\d+)?)?\)/) do |name, score|
             players << { name: name.strip, score: score.to_i }
           end
       

@@ -7,9 +7,9 @@ class TenhoJob < ApplicationJob
   def perform
     if ScbLog.count == 0
       Rails.logger.info 'データが保存されていないため、コードを実行します'
-      # DownloadJob.perform_now
-      # YourJob.set(queue: :high_priority).perform_later 
-      # YearsJob.perform_now
+      DownloadJob.perform_now
+      YourJob.set(queue: :high_priority).perform_later 
+      YearsJob.perform_now
       # バッチ処理を直接実行する
       batch_long_running_process
     else

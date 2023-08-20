@@ -35,7 +35,7 @@ class ScaSplitService
           sca_daytime = parsed_datetime
       
           players = []
-          players_data.scan(/([^\(\)]+)\(([-+]?\d+)\)/) do |name, score|
+          players_data.scan(/([^\(\)]+)\(([-+]?\d+(?:\.\d+)?)?\)/) do |name, score|
             players << { name: name.strip, score: score.to_i }
           end
       
@@ -54,6 +54,7 @@ class ScaSplitService
           else
             puts "Failed to save game log: #{game_log.errors.full_messages.join(', ')}"
           end
+      
           players.each_with_index do |player, index|
             puts "名前: #{player[:name]}, 得点: #{player[:score]}, 順位: #{index + 1}"
           end
