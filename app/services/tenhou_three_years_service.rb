@@ -4,7 +4,7 @@ require 'zip'
 require 'fileutils'
 require 'zlib'
 
-class TenhouYearsService
+class TenhouThreeYearsService
   def self.download_and_extract_logs(year)
     url = URI.parse("https://tenhou.net/sc/raw/scraw#{year}.zip")
     local_filename = File.basename(url.path)
@@ -61,8 +61,8 @@ class TenhouYearsService
 
   def self.year_service
     # 去年から2006年までのデータをダウンロードしてログを展開し、条件を満たすファイルを保存して移動
-    (Time.now.year - 1).downto(2006) do |year|
-      TenhouAllYearsService.download_and_extract_logs(year)
+    (Time.now.year - 1).downto(2020) do |year|
+      TenhouThreeYearsService.download_and_extract_logs(year)
     end
   end
 end
