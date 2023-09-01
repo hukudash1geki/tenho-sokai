@@ -1,0 +1,9 @@
+<!-- app/views/tenho_sokais/show.html.erb -->
+<% if flash[:error] %>
+  <div class="alert alert-danger">
+    <%= flash[:error] %>
+  </div>
+<% end %>
+
+<h1><%= @scblog.account_name %> の詳細</h1>
+<!-- 他の詳細情報を表示 -->
