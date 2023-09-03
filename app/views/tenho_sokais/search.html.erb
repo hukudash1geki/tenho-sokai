@@ -1,5 +1,6 @@
 <%= form_with(url: search_tenho_sokais_path, local: true, method: :get, class: "search-form") do |form| %>
   <%= form.text_field :keyword, placeholder: "ユーザー名を検索する", class: "search-input" %>
+  <%= form.hidden_field :id, value: @specific_name %> <!-- @specific_name は特定の名前を指す変数です -->
   <%= form.submit "検索", class: "search-btn" %>
 <% end %>
 <div class="contents row">
@@ -7,19 +8,19 @@
   <% @scblogs.each do |scblog| %>
     <% if @keyword.present? %>
       <% if scblog.scb_name1.include?(@keyword) && !displayed_names.include?(scblog.scb_name1) %>
-        <%= link_to scblog.scb_name1, tenho_sokai_path(scblog) %>
+        <%= link_to scblog.scb_name1, tenho_sokai_path(scblog.scb_name1, keyword: @keyword) %>
         <% displayed_names.add(scblog.scb_name1) %>
       <% end %>
       <% if scblog.scb_name2.include?(@keyword) && !displayed_names.include?(scblog.scb_name2) %>
-        <%= link_to scblog.scb_name2, tenho_sokai_path(scblog) %>
+        <%= link_to scblog.scb_name2, tenho_sokai_path(scblog.scb_name2, keyword: @keyword) %>
         <% displayed_names.add(scblog.scb_name2) %>
       <% end %>
       <% if scblog.scb_name3.include?(@keyword) && !displayed_names.include?(scblog.scb_name3) %>
-        <%= link_to scblog.scb_name3, tenho_sokai_path(scblog) %>
+        <%= link_to scblog.scb_name3, tenho_sokai_path(scblog.scb_name3, keyword: @keyword) %>
         <% displayed_names.add(scblog.scb_name3) %>
       <% end %>
       <% if scblog.scb_name4.present? && scblog.scb_name4.include?(@keyword) && !displayed_names.include?(scblog.scb_name4) %>
-        <%= link_to scblog.scb_name4, tenho_sokai_path(scblog) %>
+        <%= link_to scblog.scb_name4, tenho_sokai_path(scblog.scb_name4, keyword: @keyword) %>
         <% displayed_names.add(scblog.scb_name4) %>
       <% end %>
     <% end %>

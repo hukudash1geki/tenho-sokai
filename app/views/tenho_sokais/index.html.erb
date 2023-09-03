@@ -3,6 +3,7 @@
 <div class="search-section">
   <%= form_with(url: search_tenho_sokais_path, local: true, method: :get, class: "search-form") do |form| %>
   <%= form.text_field :keyword, placeholder: "ユーザー名を検索する", class: "search-input" %>
+  <%= form.hidden_field :id, value: @specific_name %> <!-- @specific_name は特定の名前を指す変数です -->
   <%= form.submit "検索", class: "search-btn" %>
 <% end %>
 </div>

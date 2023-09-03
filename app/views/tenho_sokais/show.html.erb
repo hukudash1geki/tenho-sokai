@@ -4,5 +4,34 @@
     <%= flash[:error] %>
   </div>
 <% end %>
+<h1><%= @name %> の過去すべての対戦成績</h1>
 
+<table>
+  <thead>
+    <tr>
+      <th>対戦相手</th>
+      <th>スコア</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @scblogs.each do |scblog| %>
+      <tr>
+        <td><%= scblog.scb_name1 %></td>
+        <td><%= scblog.scb_score1 %></td>
+      </tr>
+      <tr>
+        <td><%= scblog.scb_name2 %></td>
+        <td><%= scblog.scb_score2 %></td>
+      </tr>
+      <tr>
+        <td><%= scblog.scb_name3 %></td>
+        <td><%= scblog.scb_score3 %></td>
+      </tr>
+      <tr>
+        <td><%= scblog.scb_name4 %></td>
+        <td><%= scblog.scb_score4 %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
 <!-- 他の詳細情報を表示 -->

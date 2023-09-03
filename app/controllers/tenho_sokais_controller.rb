@@ -4,7 +4,8 @@ class TenhoSokaisController < ApplicationController
   end
 
   def show
-    @scblog = ScbLog.find(params[:id])
+    @name = params[:id] # パラメータから特定の名前を取得
+    @scblogs = ScbLog.search_user(@name)
   end
 
   def search
