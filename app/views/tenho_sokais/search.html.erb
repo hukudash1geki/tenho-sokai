@@ -8,19 +8,19 @@
   <% @scblogs.each do |scblog| %>
     <% if @keyword.present? %>
       <% if scblog.scb_name1.include?(@keyword) && !displayed_names.include?(scblog.scb_name1) %>
-        <%= link_to scblog.scb_name1, tenho_sokai_path(scblog.scb_name1, keyword: @keyword) %>
+        <%= link_to scblog.scb_name1, tenho_sokai_path(scblog.scb_name1) %>
         <% displayed_names.add(scblog.scb_name1) %>
       <% end %>
       <% if scblog.scb_name2.include?(@keyword) && !displayed_names.include?(scblog.scb_name2) %>
-        <%= link_to scblog.scb_name2, tenho_sokai_path(scblog.scb_name2, keyword: @keyword) %>
+        <%= link_to scblog.scb_name2, tenho_sokai_path(scblog.scb_name2) %>
         <% displayed_names.add(scblog.scb_name2) %>
       <% end %>
       <% if scblog.scb_name3.include?(@keyword) && !displayed_names.include?(scblog.scb_name3) %>
-        <%= link_to scblog.scb_name3, tenho_sokai_path(scblog.scb_name3, keyword: @keyword) %>
+        <%= link_to scblog.scb_name3, tenho_sokai_path(scblog.scb_name3) %>
         <% displayed_names.add(scblog.scb_name3) %>
       <% end %>
       <% if scblog.scb_name4.present? && scblog.scb_name4.include?(@keyword) && !displayed_names.include?(scblog.scb_name4) %>
-        <%= link_to scblog.scb_name4, tenho_sokai_path(scblog.scb_name4, keyword: @keyword) %>
+        <%= link_to scblog.scb_name4, tenho_sokai_path(scblog.scb_name4) %>
         <% displayed_names.add(scblog.scb_name4) %>
       <% end %>
     <% end %>
