@@ -3,10 +3,25 @@
   <%= form.submit "検索", class: "search-btn" %>
 <% end %>
 <div class="contents row">
+  <% displayed_names = Set.new %>
   <% @scblogs.each do |scblog| %>
-    <%= link_to scblog.scb_name1, tenho_sokai_path(username: scblog.scb_name1) %>
-    <%= link_to scblog.scb_name2, tenho_sokai_path(username: scblog.scb_name2) %>
-    <%= link_to scblog.scb_name3, tenho_sokai_path(username: scblog.scb_name3) %>
-    <%= link_to scblog.scb_name4, tenho_sokai_path(username: scblog.scb_name4) %>
+    <% if @keyword.present? %>
+      <% if scblog.scb_name1.include?(@keyword) && !displayed_names.include?(scblog.scb_name1) %>
+        <p><%= scblog.scb_name1 %></p>
+        <% displayed_names.add(scblog.scb_name1) %>
+      <% end %>
+      <% if scblog.scb_name2.include?(@keyword) && !displayed_names.include?(scblog.scb_name2) %>
+        <p><%= scblog.scb_name2 %></p>
+        <% displayed_names.add(scblog.scb_name2) %>
+      <% end %>
+      <% if scblog.scb_name3.include?(@keyword) && !displayed_names.include?(scblog.scb_name3) %>
+        <p><%= scblog.scb_name3 %></p>
+        <% displayed_names.add(scblog.scb_name3) %>
+      <% end %>
+      <% if scblog.scb_name4.present? && scblog.scb_name4.include?(@keyword) && !displayed_names.include?(scblog.scb_name4) %>
+        <p><%= scblog.scb_name4 %></p>
+        <% displayed_names.add(scblog.scb_name4) %>
+      <% end %>
+    <% end %>
   <% end %>
 </div>
