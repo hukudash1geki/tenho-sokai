@@ -1,13 +1,8 @@
-<!-- app/views/tenho_sokais/show.html.erb -->
-<% if flash[:error] %>
-  <div class="alert alert-danger">
-    <%= flash[:error] %>
-  </div>
-<% end %>
 <h1><%= @name %> の過去すべての対戦成績</h1>
 
 <p>総対戦数: <%= @total_matches %></p>
 <p>四麻対戦数: <%= @matches_yonma %></p>
+<p>四麻順位内訳: <%= @rank_counts_yonma %></p>
 <p>四麻平均順位: <%= @average_rank_yonma %></p>
 <p>四麻スコア合計: <%= @score_yonma %></p>
 <p>四麻平均スコア: <%= @average_score_yonma %></p>
@@ -15,4 +10,5 @@
 <p>三麻平均順位: <%= @average_rank_sanma %></p>
 <p>三麻スコア合計: <%= @score_sanma %></p>
 <p>三麻平均スコア: <%= @average_score_sanma %></p>
+<p>三麻順位内訳: <%= @rank_counts_sanma %></p>
 <!-- 他の詳細情報を表示 -->
