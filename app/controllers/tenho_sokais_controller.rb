@@ -1,6 +1,7 @@
 # app/controllers/tenho_sokais_controller.rb
 class TenhoSokaisController < ApplicationController
   def index
+    
   end
 
   def show
@@ -14,8 +15,6 @@ class TenhoSokaisController < ApplicationController
     @matches_yonma = service.instance_variable_get(:@matches_yonma)
     @score_sanma = service.instance_variable_get(:@score_sanma)
     @score_yonma = service.instance_variable_get(:@score_yonma)
-    @rank_yonma = service.instance_variable_get(:@rank_yonma)
-    @rank_sanma = service.instance_variable_get(:@rank_sanma)
     @rank_counts_sanma = service.instance_variable_get(:@rank_counts_sanma)
     @rank_counts_yonma = service.instance_variable_get(:@rank_counts_yonma)
     @average_rank_sanma = service.instance_variable_get(:@average_rank_sanma)

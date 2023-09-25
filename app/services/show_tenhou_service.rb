@@ -19,7 +19,7 @@ class ShowTenhouService
     # ルールの頭文字が「四」で始まる試合のデータを抽出
     scblogs_yonma = @scblogs.select { |scblog| scblog.scb_rule.start_with?('四') }
 
-    # 総対戦数を計算
+    # 各対戦数を計算
     @matches_sanma = scblogs_sanma.count
     @matches_yonma = scblogs_yonma.count
 
