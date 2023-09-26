@@ -22,17 +22,20 @@
 <script>
   var ctx = document.getElementById('myChart').getContext('2d');
   var myChart = new Chart(ctx, {
-    type: 'bar',
+    type: 'pie',
     data: {
       labels: ['1位', '2位', '3位', '4位'],
       datasets: [{
         label: '四麻順位内訳',
-        data: [84, 76, 78, 73],
+        data: [<%= @rank_counts_yonma[1] %>, <%= @rank_counts_yonma[2] %>, <%= @rank_counts_yonma[3] %>, <%= @rank_counts_yonma[4] %>],
         backgroundColor: ['green', 'blue', 'yellow', 'red']
       }]
     },
     options: {
-      responsive: true
+      responsive: false,
+      maintainAspectRatio: false, // アスペクト比を維持しない
+      width: 10, // グラフの幅を設定
+      height: 10, // グラフの高さを設定
     }
   });
 </script>
