@@ -79,5 +79,13 @@ class ShowTenhouService
     # 平均スコアを計算
     @average_score_sanma = @score_sanma.to_f / @matches_sanma if @matches_sanma > 0
     @average_score_yonma = @score_yonma.to_f / @matches_yonma if @matches_yonma > 0
+
+    # 平均順位有効数字2桁
+    @average_rank_sanma = @average_rank_sanma.nil? ? 0 : format("%.2f",@average_rank_sanma)
+    @average_rank_yonma = @average_rank_yonma.nil? ? 0 : format("%.2f",@average_rank_yonma)
+
+    # 平均順位有効数字2桁
+    @average_score_sanma = @average_score_sanma.nil? ? 0 : format("%.2f",@average_score_sanma)
+    @average_score_yonma = @average_score_yonma.nil? ? 0 : format("%.2f",@average_score_yonma)
   end
 end

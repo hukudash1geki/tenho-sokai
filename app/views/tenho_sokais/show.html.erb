@@ -1,5 +1,7 @@
 <h1><%= @name %> の過去すべての対戦成績</h1>
 
+<%= link_to '三麻', show_another_tenho_sokai_path(@name) %>
+
 <p>総対戦数: <%= @total_matches %></p>
 <p>四麻対戦数: <%= @matches_yonma %></p>
 <p>四麻順位内訳: </p><% @rank_counts_yonma.each do |position, count| %>
@@ -8,13 +10,6 @@
 <p>四麻平均順位: <%= @average_rank_yonma %></p>
 <p>四麻スコア合計: <%= @score_yonma %></p>
 <p>四麻平均スコア: <%= @average_score_yonma %></p>
-<p>三麻対戦数: <%= @matches_sanma %></p>
-<p>三麻平均順位: <%= @average_rank_sanma %></p>
-<p>三麻スコア合計: <%= @score_sanma %></p>
-<p>三麻平均スコア: <%= @average_score_sanma %></p>
-<p>三麻順位内訳: </p><% @rank_counts_sanma.each do |position, count| %>
-  <p><%= "#{position}位 #{count}回" %></p>
-<% end %>
 <!-- 他の詳細情報を表示 -->
 <!-- グラフを表示するためのHTML要素 -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
